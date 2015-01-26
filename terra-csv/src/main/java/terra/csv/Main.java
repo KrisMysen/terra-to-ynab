@@ -1,11 +1,13 @@
 package terra.csv;
 
 import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.grizzly.http.server.StaticHttpHandler;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.Map;
 
 /**
  * Main class.
@@ -36,8 +38,13 @@ public class Main {
      */
     public static void main(String[] args) throws IOException {
         final HttpServer server = startServer();
+
+        StaticHttpHandler staticHttpHandler = new StaticHttpHandler("../webroot");
+        server.getServerConfiguration().addHttpHandler(staticHttpHandler, "/");
+
         System.out.println(String.format("Jersey app started with WADL available at "
                 + "%sapplication.wadl\nHit enter to stop it...", BASE_URI));
+
         System.in.read();
         server.shutdown();
     }
